@@ -1,4 +1,4 @@
-const LivroDao = require('../infra/livro-dao');
+const LivroDao = require('../infra/LivroDao');
 const db = require('../../config/database');
 
 module.exports = (app) => {
@@ -28,15 +28,17 @@ module.exports = (app) => {
                     }
                 ))
                 .catch(erro => console.log(erro));
-        // livroDao.lista(function(erro, resultados) {
+    });
 
-        //     resp.marko(
-        //         require('../views/livros/lista/lista.marko'),
-        //         {
-        //             livros: resultados
-        //         }
-        //     );
+    app.get('/livros/form', function(req, resp) {
+        resp.marko(require('../views/livros/form/form.marko'));
+    });
 
-        // });
+    app.post('/livros', function(req, resp) {
+        console.log(req.body);
+        const livroDao = new LivroDao(db);
+        livroDao.adiciona(req.body)
+                .then(resp.redirect('/livros'))
+                .catch(erro => console.log(erro));
     });
 };
